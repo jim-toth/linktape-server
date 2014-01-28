@@ -13,7 +13,7 @@ var loglevel = 5;
 var port = 80;
 var mongohost = 'localhost';
 var mongoport = 27017;
-var basepath = '../app/';
+var basepath = '../linktapejs';
 
 // Whitelist of allowed files/directories
 var whitelist = ['/index.html', '/style', '/js', '/playlist.ejs'];
@@ -73,10 +73,6 @@ function route(request, response) {
 
 	if (pathname == '/') {
 		pathname = '/index.html';
-	}
-
-	if (pathname == '/index.html') {
-		pathname = '/playlist.ejs';
 	}
 
 	// Allow direct file requests from whitelist or root directory from whitelist (only domain/root)
