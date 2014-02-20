@@ -14,9 +14,10 @@ var port = 80;
 var mongohost = 'localhost';
 var mongoport = 27017;
 var basepath = '../linktapejs';
+// var basepath = '../jamminjs/app';
 
 // Whitelist of allowed files/directories
-var whitelist = ['/index.html', '/style', '/js', '/playlist.ejs'];
+var whitelist = ['/index.html', '/style', '/js'];
 
 /**
  * File extension to content-type
@@ -125,52 +126,48 @@ function route(request, response) {
 	} else {
 		// Check to see if it is a playlist slug.
 		var pid = pathname.split("/")[1];
-		mongoGetPlaylist(pid, function(err, playlist) {
-			if (err) {
-				ltLog.error(err);
-				response.writeHead(500, {
-					"Content-Type": "text/plain"
-				});
-				response.write("Internal Server Error");
-				response.end();
-			} else {
-				if(playlist != null) {
-					fs.readFile(basepath + '/playlist.ejs', {
-						"encoding": "utf8"
-					}, function(err, file) {
-						if (err) {
-							ltLog.error(err);
+
+		// send index.html
+		try {
+			fs.readFile(basepath + '/index.html', fileopts, function(err, file) {
+				if (err) {
+					ltLog.error(err);
+					response.writeHead(500, {
+						"Content-Type": "text/plain"
+					});
+					response.write("Internal Server Error");
+					response.end();
+				} else {
+					ltLog.dev('Serving ' + pathname);
+					response.writeHead(200, {
+						"Content-Type": "text/html"
+					});
+					if (path.extname(pathname) == '.ejs') {
+						try {
+							response.end(ejs.render(file, {
+								"title": "LINKTA.PE"
+							}));
+						} catch (e) {
+							ltLog.error(e);
 							response.writeHead(500, {
 								"Content-Type": "text/plain"
 							});
 							response.write("Internal Server Error");
 							response.end();
-						} else {
-							ltLog.prod('Serving playlist ' + pid);
-							response.writeHead(200, {
-								"Content-Type": extToContentType('.ejs')
-							});
-							playlist["passphrase"] = undefined;
-							try {
-								response.end(ejs.render(file, {
-									"title": "LINKTA.PE - " + (playlist.name || 'Untitled Playlist'),
-									"init_playlist": JSON.stringify(playlist)
-								}));
-							} catch (e) {
-								ltLog.dev(e);
-							}
 						}
-					});
-				} else {
-					ltLog.prod('Denied request for ' + pathname);
-					response.writeHead(404, {
-						"Content-Type": "text/plain"
-					});
-					response.write("404");
-					response.end();
+					} else {
+						response.end(file);
+					}
 				}
-			}
-		});
+			});
+		} catch (e) {
+			ltLog.error(e);
+			response.writeHead(500, {
+				"Content-Type": "text/plain"
+			});
+			response.write("Internal Server Error");
+			response.end();
+		}
 	}
 }
 
