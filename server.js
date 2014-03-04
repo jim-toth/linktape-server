@@ -6,7 +6,6 @@ var _request = require('request');
 var MongoClient = require('mongodb').MongoClient;
 var format = require('util').format;
 var ltLog = require('./ltLog');
-var ejs = require('ejs');
 
 var logfilename = 'server.log';
 var loglevel = 5;
