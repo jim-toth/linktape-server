@@ -10,7 +10,7 @@ var ejs = require('ejs');
 
 var logfilename = 'server.log';
 var loglevel = 5;
-var port = 80;
+var port = 8000;
 var mongohost = 'localhost';
 var mongoport = 27017;
 var basepath = '../linktapejs';
