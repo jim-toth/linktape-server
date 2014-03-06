@@ -6,6 +6,7 @@ var _request = require('request');
 var MongoClient = require('mongodb').MongoClient;
 var format = require('util').format;
 var ltLog = require('./ltLog');
+var config = require('./config');
 
 var logfilename = 'server.log';
 var loglevel = 5;
@@ -659,9 +660,11 @@ function onRequest(request, response) {
 	}
 }
 
+
+
 // Start logger
 ltLog.startLogger(logfilename, loglevel);
 // Create and listen
-http.createServer(onRequest).listen(port);
+http.createServer(onRequest).listen(config.web.port);
 
 ltLog.prod("Started");
