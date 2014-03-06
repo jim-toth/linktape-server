@@ -13,8 +13,6 @@ var loglevel = 5;
 var port = 8000;
 var mongohost = 'localhost';
 var mongoport = 27017;
-var basepath = '../linktapejs';
-// var basepath = '../jamminjs/app';
 
 // Whitelist of allowed files/directories
 var whitelist = ['/index.html', '/style', '/js'];
@@ -84,7 +82,7 @@ function route(request, response) {
 		}
 
 		try {
-			fs.readFile(basepath + pathname, fileopts, function(err, file) {
+			fs.readFile(config.web.root_directory + pathname, fileopts, function(err, file) {
 				if (err) {
 					ltLog.error(err);
 					response.writeHead(500, {
@@ -129,7 +127,7 @@ function route(request, response) {
 
 		// send index.html
 		try {
-			fs.readFile(basepath + '/index.html', fileopts, function(err, file) {
+			fs.readFile(config.web.root_directory + '/index.html', fileopts, function(err, file) {
 				if (err) {
 					ltLog.error(err);
 					response.writeHead(500, {
