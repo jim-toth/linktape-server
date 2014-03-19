@@ -440,13 +440,13 @@ function savePlaylist(request, response) {
 		// Received a chunk, concatenate.
 		request.on('data', function(chunk) {
 			data += chunk;
-			});
+		});
 
 		// Done receiving data, construct playlist object
 		request.on('end', function() {
 			
 			var json = JSON.parse(data);
-			ltLog.dev(json);
+			ltLog.dev('PID: ' + json.pid);
 			
 			var pl = new Object();
 			pl.pid = json.pid || null;
@@ -564,7 +564,7 @@ function routePlaylist(request, response) {
 		var pathpcs = pathname.split('/');
 
 		if (pathpcs.length > 2 && pathpcs[2] != '') {
-			clonePlaylist(request, response);
+			savePlaylist(request, response);
 		} else {
 			savePlaylist(request, response);
 		}
